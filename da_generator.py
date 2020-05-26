@@ -12,15 +12,24 @@ import re
 
 tprint("Lazy CarbonBlack\nQuery Generator")
 query = ''
+q_tab = []
 def parse_iocs(ioc):
 	#check ioc and prepend appropriate tag
-	print(ioc)
-	if validators.ip_address.ipv4(ioc.strip()):
-		tmp = 'ipaddr:'+ioc.strip()
-		return tmp
-	elif re.match(r'([a-fA-F\d]{32})', ioc.strip()):
-		tmp = 'md5:'+ioc.strip()
-		return tmp
+	#print(ioc)
+	if ioc.strip()[0] == '-':
+		if validators.ip_address.ipv4(ioc.strip()[1:len(ioc)]): #ip
+			tmp = ioc.strip()[:1]+'ipaddr:'+ioc.strip()[1:]
+			return tmp
+		elif re.match(r'([a-fA-F\d]{32})', ioc.strip()[1:len(ioc)]): #md5
+			tmp = ioc.strip()[:1]+'md5:'+ioc.strip()[1:]
+			return tmp
+	else:
+		if validators.ip_address.ipv4(ioc.strip()): #ip
+			tmp = 'ipaddr:'+ioc.strip()
+			return tmp
+		elif re.match(r'([a-fA-F\d]{32})', ioc.strip()): #md5
+			tmp = 'md5:'+ioc.strip()
+			return tmp
 
 
 parser = argparse.ArgumentParser(description="""
