@@ -20,17 +20,22 @@ def parse_iocs(ioc):
 		if validators.ip_address.ipv4(ioc.strip()[1:len(ioc)]): #ip
 			tmp = ioc.strip()[:1]+'ipaddr:'+ioc.strip()[1:]
 			return tmp
-		elif re.match(r'([a-fA-F\d]{32})', ioc.strip()[1:len(ioc)]): #md5
+		elif re.match(r'(^[a-fA-F\d]{32}$)', ioc.strip()[1:len(ioc)]): #md5
 			tmp = ioc.strip()[:1]+'md5:'+ioc.strip()[1:]
+			return tmp
+		elif re.match(r'(^[a-fA-F\d]{64}$)', ioc.strip()[1:len(ioc)]): #sha256
+			tmp = ioc.strip()[:1]+'sha256:'+ioc.strip()[1:]
 			return tmp
 	else:
 		if validators.ip_address.ipv4(ioc.strip()): #ip
 			tmp = 'ipaddr:'+ioc.strip()
 			return tmp
-		elif re.match(r'([a-fA-F\d]{32})', ioc.strip()): #md5
+		elif re.match(r'(^[a-fA-F\d]{32}$)', ioc.strip()): #md5
 			tmp = 'md5:'+ioc.strip()
 			return tmp
-
+		elif re.match(r'(^[a-fA-F\d]{64}$)', ioc.strip()): #sha256
+			tmp = 'sha256:'+ioc.strip()
+			return tmp
 
 parser = argparse.ArgumentParser(description="""
 	Easily create a CB search query using a list of IOCs.
@@ -46,7 +51,7 @@ args = parser.parse_args()
 
 ioc_list = []
 try:
-	with open(args.ioc_files, "r") as iocs:
+	with open(args.ioc_file, "r") as iocs:
 		for each in iocs:
 			ioc_list.append(each)
 except (ValueError, FileNotFoundError, NameError) as e:
