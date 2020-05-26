@@ -5,7 +5,7 @@ I got tired of copying and pasting so I started writing a script
 # Install
 ```
 git clone https://github.com/devnull044/cb_search_generator.git
-pip3 install -r requirements
+pip3 install -r requirements.txt
 ```
 # Usage
 
