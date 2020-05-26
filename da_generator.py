@@ -39,7 +39,7 @@ parser = argparse.ArgumentParser(description="""
 
 parser.add_argument("-f","--filename",
 					required=True,
-					dest="ioc_files",
+					dest="ioc_file",
 					action="store",
 					help="the location of the file containing IOCs")
 args = parser.parse_args()
