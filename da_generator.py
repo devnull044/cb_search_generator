@@ -26,6 +26,9 @@ def parse_iocs(ioc):
 		elif re.match(r'(^[a-fA-F\d]{64}$)', ioc.strip()[1:len(ioc)]): #sha256
 			tmp = ioc.strip()[:1]+'sha256:'+ioc.strip()[1:]
 			return tmp
+		elif validators.domain(ioc.strip()[1:len(ioc)]): #domain
+			tmp = ioc.strip()[:1]+'domain:'+ioc.strip()[1:]
+			return tmp
 	else:
 		if validators.ip_address.ipv4(ioc.strip()): #ip
 			tmp = 'ipaddr:'+ioc.strip()
@@ -36,7 +39,9 @@ def parse_iocs(ioc):
 		elif re.match(r'(^[a-fA-F\d]{64}$)', ioc.strip()): #sha256
 			tmp = 'sha256:'+ioc.strip()
 			return tmp
-
+		elif validators.domain(ioc.strip()): #domain
+			tmp = 'domain:'+ioc.strip()
+			return tmp
 parser = argparse.ArgumentParser(description="""
 	Easily create a CB search query using a list of IOCs.
 	Ex. MD5, SHA256, Domain(s), IP(s), IP Ranges, etc.
@@ -63,6 +68,3 @@ for ioc in ioc_list:
 	else:
 		query += parse_iocs(ioc)
 print(query)
-
-
-
